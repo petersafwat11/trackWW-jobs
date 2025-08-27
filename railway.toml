@@ -1,0 +1,15 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "npm start"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+[build.nixpacks]
+providers = ["node"]
+
+# This ensures Railway treats this as a worker/background service, not a web service
+[[services]]
+name = "container-tracking-cron"
+source = "."
