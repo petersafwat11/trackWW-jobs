@@ -11,14 +11,25 @@ const concurrency = parseInt(process.env.CONCURRENCY) || 10;
 // Helper function to get active schedules from API
 async function getActiveSchedules(offset = 0, limit = batchSize) {
   try {
+    console.log(`🔍 Fetching schedules from: ${baseURL}/api/schedules/active?offset=${offset}&limit=${limit}`);
+    
     const response = await axios.get(`${baseURL}/api/schedules/active`, {
       params: { offset, limit },
       timeout: 30000,
     });
 
+    console.log(`✅ API Response Status: ${response.status}`);
+    console.log(`📊 Response Data:`, JSON.stringify(response.data, null, 2));
+
     return response.data?.data || [];
   } catch (error) {
-    console.error("Error fetching active schedules:", error.message);
+    console.error("❌ Error fetching active schedules:", error.message);
+    
+    if (error.response) {
+      console.error("🔍 Response Status:", error.response.status);
+      console.error("🔍 Response Data:", JSON.stringify(error.response.data, null, 2));
+    }
+    
     return [];
   }
 }
